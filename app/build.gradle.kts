@@ -52,13 +52,13 @@ android {
 }
 
 dependencies {
-    implementation(libs.firebase.firestore)
     val room_version = "2.5.0"
 
     add("ksp", "androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
+    implementation(libs.firebase.firestore)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
