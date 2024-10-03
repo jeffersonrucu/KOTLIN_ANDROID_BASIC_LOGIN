@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -37,7 +36,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +45,6 @@ import com.example.loginstudiostg.R
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import login.database.entity.User
 import login.ui.theme.Black900
 import login.ui.theme.Blue100
 import login.ui.theme.Blue900
@@ -70,7 +67,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyAppContent(db: FirebaseFirestore) {
     Column {
-        Login(db)
+//        Login(db)
         ListUsers(db)
     }
 }
@@ -106,7 +103,10 @@ fun Input(label: String, value: String, onValueChange: (String) -> Unit) {
                 isFocused.value = focusState.isFocused
             }
             .border(
-                border = if (isFocused.value) BorderStroke(2.dp, Blue900) else BorderStroke(0.dp, Color.Transparent),
+                border = if (isFocused.value) BorderStroke(2.dp, Blue900) else BorderStroke(
+                    0.dp,
+                    Color.Transparent
+                ),
                 shape = RoundedCornerShape(10.dp),
             )
             .fillMaxWidth()
@@ -128,7 +128,9 @@ fun ListUsers(db: FirebaseFirestore) {
         .get()
         .addOnSuccessListener { result ->
             for (document in result) {
-                users.add(document.data)
+                if (!document.data["password"].toString().isEmpty()) {
+                    users.add(document.data)
+                }
             }
         }
         .addOnFailureListener { exception ->
@@ -144,14 +146,10 @@ fun ListUsers(db: FirebaseFirestore) {
         Column {
             LazyColumn {
                 items(users.size) {
-                    if (users[it]["password"].toString() == "") {
-                        return@items
-                    }
-
                     Box(
                         modifier = Modifier
                             .padding(bottom = 10.dp)
-                            .background(Blue900)
+                            .background(if (it % 2 == 0) Blue900 else Black900)
                             .fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(12.dp)) {
