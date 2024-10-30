@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.database)
     val room_version = "2.5.0"
 
     add("ksp", "androidx.room:room-compiler:$room_version")
